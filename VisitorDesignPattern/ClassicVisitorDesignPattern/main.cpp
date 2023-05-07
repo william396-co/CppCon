@@ -97,9 +97,15 @@ void drawAllShapes(std::vector<std::unique_ptr<Shape>> const& shapes){
 }
 
 /*
- * An OO solution may appear better, but has two serious flaws:
- * . Adding operations is intrusive and thus difficult
- * . Adding operations accumulates dependencies.
+ * Advantages:
+ * . Allows the non-intrusive addition of operations(OCP)
+ * . Isolates the implementation details of operations(SRP)
+ *
+ * Disadvantages:
+ * .Impedes the addition of new types(shapes)
+ * .Restrict operations to public interface of types
+ * .Negatively affects performance(two virtual functions)
+ *
  */
 
 int main(){

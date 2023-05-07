@@ -12,7 +12,7 @@ namespace lambda_idioms_03
 
 struct X{
 
-    X(){ // local static lambda
+    X(){ // local static unamed(just use _ as a name) lambda
     static auto _ = []{  println("call once!"); return 0;}();
     }
 };

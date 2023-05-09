@@ -1,5 +1,6 @@
 #include "../../util/print.h"
 
+#include <type_traits>
 #include <vector>
 #include <variant>
 #include <functional>
@@ -11,6 +12,9 @@ public:
         : radius { rad }
     {}
     double getRadius() const noexcept { return radius; }
+    void out(int id)const {
+        println(__PRETTY_FUNCTION__,"(", id,")");
+    }
 
 private:
     double radius;
@@ -23,7 +27,9 @@ public:
         : side { s } {}
 
     double getSide() const noexcept { return side; }
-
+    void out(int id)const {
+        println(__PRETTY_FUNCTION__,"(", id,")");
+    }
 private:
     double side;
 };
@@ -46,14 +52,19 @@ class Draw
 public:
     explicit Draw( int id )
         : id { id } {}
-    void operator()( Circle const & circle ) const
+    template<typename T>
+    void operator()( T const & circle ) const
     {
-        println( "Draw Circle(", id, ")" );
+        if constexpr ( std::is_same_v<T, Circle> ) {
+            println( "Draw Circle(", id, ")" );
+        } else if constexpr ( std::is_same_v<T, Square> ) {
+            println( "Square Circle(", id, ")" );
+        }
     }
-    void operator()( Square const & square ) const
+/*    void operator()( Square const & square ) const
     {
         println( "Draw Sqaure(", id, ")" );
-    }
+    }*/
 
 private:
     int id;
@@ -81,12 +92,16 @@ private:
 using Shape = std::variant<Circle, Square>;
 using RoundShape = std::variant<Circle, Ellipse>;
 
-void drawAllShapes( std::vector<Shape> const & shapes )
+void drawAllShapes( std::vector<Shape> const& shapes )
 {
     int id = 0;
-    for ( auto const & s : shapes ) {
+    for ( auto & s : shapes ) {
         std::visit( Draw { ++id }, s );
         std::visit( Rotate { ( ++id ) % 8 }, s );
+
+        // lambda
+        std::visit([&id](auto && arg) { return arg.out(id); },s);
+
     }
 }
 

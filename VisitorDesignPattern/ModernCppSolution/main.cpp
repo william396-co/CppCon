@@ -44,14 +44,19 @@ private:
 class Draw
 {
 public:
+    explicit Draw( int id )
+        : id { id } {}
     void operator()( Circle const & circle ) const
     {
-        println( "Draw Circle" );
+        println( "Draw Circle(", id, ")" );
     }
     void operator()( Square const & square ) const
     {
-        println( "Draw Sqaure" );
+        println( "Draw Sqaure(", id, ")" );
     }
+
+private:
+    int id;
 };
 
 // Add operations rotate
@@ -73,8 +78,9 @@ using RoundShape = std::variant<Circle, Ellipse>;
 
 void drawAllShapes( std::vector<Shape> const & shapes )
 {
+    int id = 0;
     for ( auto const & s : shapes ) {
-        std::visit( Draw {}, s );
+        std::visit( Draw { ++id }, s );
         //        std::visit(Rotate{}, s, id);
     }
 }

@@ -2,24 +2,28 @@
 
 #include <vector>
 #include <variant>
+#include <functional>
 
-class Circle{
+class Circle
+{
 public:
-    explicit Circle(double rad):radius{rad}
+    explicit Circle( double rad )
+        : radius { rad }
     {}
-    double getRadius()const noexcept{return radius;}
+    double getRadius() const noexcept { return radius; }
+
 private:
     double radius;
 };
 
-
 class Square
 {
 public:
-    explicit Square(double s):
-             side{s}{}
+    explicit Square( double s )
+        : side { s } {}
 
-    double getSide()const noexcept{return side;}
+    double getSide() const noexcept { return side; }
+
 private:
     double side;
 };
@@ -27,45 +31,63 @@ private:
 class Ellipse
 {
 public:
-    explicit Ellipse(double r1, double r2):m_r1{r1},m_r2{r2}{}
+    explicit Ellipse( double r1, double r2 )
+        : m_r1 { r1 }, m_r2 { r2 } {}
+
 private:
     double m_r1;
     double m_r2;
 };
 
-
 // No base class required!
 // Operations can be non-intrusively be added
-class Draw{
+class Draw
+{
 public:
-    void operator()(Circle const& circle)const{
-        println("Draw Circle");
+    explicit Draw( int id )
+        : id { id } {}
+    void operator()( Circle const & circle ) const
+    {
+        println( "Draw Circle(", id, ")" );
     }
-    void operator()(Square const& square)const{
-        println("Draw Sqaure");
+    void operator()( Square const & square ) const
+    {
+        println( "Draw Sqaure(", id, ")" );
     }
-  };
+
+private:
+    int id;
+};
 
 // Add operations rotate
 class Rotate
 {
 public:
-    void operator()(Circle const& circle)const{
-        println("Rotate Circle");
+    explicit Rotate( int dir )
+        : dir { dir } {}
+    void operator()( Circle const & circle ) const
+    {
+        println( "Rotate Circle(", dir, ")" );
     }
-    void operator()(Square const& square)const{
-        println("Rotate Sqaure");
+    void operator()( Square const & square ) const
+    {
+        println( "Rotate Sqaure(", dir, ")" );
     }
+
+private:
+    int  dir;
 };
 
 using Shape = std::variant<Circle, Square>;
 using RoundShape = std::variant<Circle, Ellipse>;
 
-void drawAllShapes(std::vector<Shape> const& shapes){
-    for(auto const& s: shapes){
-        std::visit(Draw{}, s);
-        std::visit(Rotate{}, s);
-     }
+void drawAllShapes( std::vector<Shape> const & shapes )
+{
+    int id = 0;
+    for ( auto const & s : shapes ) {
+        std::visit( Draw { ++id }, s );
+        std::visit( Rotate { ( ++id ) % 8 }, s );
+    }
 }
 
 /*
@@ -113,16 +135,16 @@ void drawAllShapes(std::vector<Shape> const& shapes){
  * ----------------------------------------------------------------------
  */
 
-int main(){
+int main()
+{
 
     using Shapes = std::vector<Shape>;
 
     Shapes shapes;
-    shapes.emplace_back(Circle{2.0});
-    shapes.emplace_back(Square{1.5});
-    shapes.emplace_back(Circle{4.2});
+    shapes.emplace_back( Circle { 2.0 } );
+    shapes.emplace_back( Square { 1.5 } );
+    shapes.emplace_back( Circle { 4.2 } );
 
-
-    drawAllShapes(shapes);
+    drawAllShapes( shapes );
     return 0;
 }

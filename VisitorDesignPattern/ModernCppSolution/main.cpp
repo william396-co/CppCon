@@ -3,33 +3,53 @@
 #include <type_traits>
 #include <vector>
 #include <variant>
-#include <functional>
 
-class Circle
+enum ShapeType
+{
+    circle,
+    square,
+};
+
+class ShapeBase
+{
+public:
+    explicit ShapeBase(ShapeType type):type{type}{}
+
+    ShapeType getType() const { return type; }
+
+private:
+    ShapeType type;
+};
+
+class Circle : public ShapeBase
 {
 public:
     explicit Circle( double rad )
-        : radius { rad }
+        : ShapeBase{ circle },
+           radius { rad }
     {}
     double getRadius() const noexcept { return radius; }
-    void out(int id)const {
-        println(__PRETTY_FUNCTION__,"(", id,")");
+    void out( int id ) const
+    {
+        println( __PRETTY_FUNCTION__, "(", id, ")" );
     }
 
 private:
     double radius;
 };
 
-class Square
+class Square : public ShapeBase
 {
 public:
-    explicit Square( double s )
-        : side { s } {}
+    explicit Square( double s ): ShapeBase{square},
+         side { s } {}
 
     double getSide() const noexcept { return side; }
-    void out(int id)const {
-        println(__PRETTY_FUNCTION__,"(", id,")");
+    void out( int id ) const
+    {
+        println( __PRETTY_FUNCTION__, "(", id, ")" );
     }
+
 private:
     double side;
 };
@@ -61,7 +81,7 @@ public:
             println( "Square Circle(", id, ")" );
         }
     }
-/*    void operator()( Square const & square ) const
+    /*    void operator()( Square const & square ) const
     {
         println( "Draw Sqaure(", id, ")" );
     }*/
@@ -86,22 +106,23 @@ public:
     }
 
 private:
-    int  dir;
+    int dir;
 };
 
 using Shape = std::variant<Circle, Square>;
 using RoundShape = std::variant<Circle, Ellipse>;
 
-void drawAllShapes( std::vector<Shape> const& shapes )
+void drawAllShapes( std::vector<Shape> const & shapes )
 {
     int id = 0;
     for ( auto & s : shapes ) {
         std::visit( Draw { ++id }, s );
         std::visit( Rotate { ( ++id ) % 8 }, s );
 
+        // use lambda visit Variant Base class function
+        println( "Shape Type:", std::visit( []( auto && arg ) { return arg.getType(); }, s ) );
         // lambda
-        std::visit([&id](auto && arg) { return arg.out(id); },s);
-
+        std::visit( [&id]( auto && arg ) { return arg.out( id ); }, s );
     }
 }
 

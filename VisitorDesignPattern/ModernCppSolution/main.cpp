@@ -3,8 +3,6 @@
 #include <type_traits>
 #include <vector>
 #include <variant>
-#include <functional>
-#include <any>
 
 enum ShapeType
 {

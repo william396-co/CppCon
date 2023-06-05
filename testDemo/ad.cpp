@@ -9,7 +9,7 @@ int main()
     std::vector<int> a( 1, 0 );
     printf( "loca of x:%p\n", &x );
     printf( "local of &a: %p\n", &a );
-    printf( "local of a:%p\n", a );
+    printf( "local of a:%p\n", a ); // just copy constructor with non-pod
     printf( "local of a.data= %p\n", &a[0] );
     printf( " local of stack: %p\n", (void *)malloc( 1 ) );
 

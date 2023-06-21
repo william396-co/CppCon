@@ -25,7 +25,7 @@ long fib(int n)
 }
 
 int main(){
-    std::cout<<"hello "<<std::endl;
+    std::cout<<"hello this is fibonacci function example "<<std::endl;
     for(int i =0; i < 10;++i){
 	    std::cout<<"fibonacci("<<i<<")="<< fibonacci(i)<<"\n";
     }

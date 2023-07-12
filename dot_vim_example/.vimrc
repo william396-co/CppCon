@@ -22,7 +22,7 @@ Plugin 'tpope/vim-fugitive'
 " Git plugin not hosted on GitHub
 Plugin 'git://git.wincent.com/command-t.git'
 " git repos on your local machine (i.e. when working on your own plugin)
-Plugin 'file:///home/gmarik/path/to/plugin'
+" Plugin 'file:///home/gmarik/path/to/plugin'
 " The sparkup vim script is in a subdirectory of this repo called vim.
 " Pass the path to set the runtimepath properly.
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
@@ -34,6 +34,7 @@ Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'tomasr/molokai'
 Plugin 'vim-scripts/a.vim'
 Plugin 'rhysd/vim-clang-format'
+Plugin 'xavierd/clang_complete'
 
 
 " All of your Plugins must be added before the following line
@@ -50,12 +51,11 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-
-
-
 " default set num
-set nu
 
+set nu
+set tabstop=4
+set numberwidth=5
 
 if exists('$VIM_TERMINAL')
   echoerr 'Do not run Vim inside a Vim terminal'
@@ -149,8 +149,10 @@ if exists('g:loaded_minpac')
   call minpac#add('vim-scripts/SyntaxAttr.vim')
   call minpac#add('yegappan/mru')
   call minpac#add('lyuts/vim-rtags')
-  call minpac#add('frazrepo/vim-rainbow')  
-  
+  call minpac#add('frazrepo/vim-rainbow') 
+"  call minpac#add('rhysd/vim-clang-format')
+ " call minpac#add('vim-autoformat/vim-autoformat')
+
   " unused pack
   call minpac#add('mattn/calendar-vim')
   call minpac#add('uguu-org/vim-matrix-screensaver')
@@ -266,8 +268,8 @@ if has('autocmd')
   endif
 
   " clang_format 设置
-let g:clang_format#code_style='webkit'
-        let g:clang_format#style_options = {
+  let g:clang_format#code_style='webkit'
+  let g:clang_format#style_options = {
                                 \ "Standard" : "Latest",
                                 \ "SortIncludes" : "false",
                                 \ "AccessModifierOffset" : -4,
@@ -300,7 +302,8 @@ let g:clang_format#code_style='webkit'
                                 \ "BreakConstructorInitializers" : "BeforeColon", 
                                 \ "BreakBeforeBraces" : "Mozilla", 
                                 \ }
-
+  autocmd FileType c,cpp,objc nnoremap <buffer><F3> :<C-u>ClangFormat<CR>
+  autocmd FileType c,cpp,objc vnoremap <buffer><F3> :ClangFormat<CR>
 
 
 
@@ -332,4 +335,5 @@ let g:clang_format#code_style='webkit'
   au FileType help        nnoremap <buffer> q <C-W>c
 
   au BufRead /usr/include/*  call GnuIndent()
+ 
 endif

@@ -11,7 +11,7 @@
 #define UDP_TEST_PORT 50001
 #define UDP_SERVER_IP "127.0.0.1"
 
-void getsockname( int fd, struct sockaddr_in * addr )
+void Getsockname( int fd, struct sockaddr_in * addr )
 {
     socklen_t addr_len = sizeof( *addr );
     if ( getsockname( fd, (struct sockaddr *)addr, &addr_len ) == -1 ) {
@@ -42,7 +42,7 @@ int main( int argC, char * arg[] )
     }
 
     // 获得bind后系统分配的本地端口
-    print_getsockname( sockfd, &localaddr );
+    Getsockname( sockfd, &localaddr );
 
     /* 填写sockaddr_in*/
     struct sockaddr_in remoteaddr;

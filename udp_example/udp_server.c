@@ -36,13 +36,16 @@ int main( int argC, char * arg[] )
 
     while ( 1 ) {
         bzero( buffer, sizeof( buffer ) );
-        len = recvfrom( sockfd, buffer, sizeof( buffer ), 0, (struct sockaddr *)&addr, &addr_len );
+        //        len = recvfrom( sockfd, buffer, sizeof( buffer ), 0, (struct sockaddr *)&addr, &addr_len );
+        len = read( sockfd, buffer, sizeof( buffer ) );
         /* 显示client端的网络地址和收到的字符串消息 */
         printf( "Received a string from client %s:%d, string is: %s\n",
-            inet_ntoa( addr.sin_addr ), ntohs(addr.sin_port),
+            inet_ntoa( addr.sin_addr ),
+            ntohs( addr.sin_port ),
             buffer );
         /* 将收到的字符串消息返回给client端 */
-        sendto( sockfd, buffer, len, 0, (struct sockaddr *)&addr, addr_len );
+        // sendto( sockfd, buffer, len, 0, (struct sockaddr *)&addr, addr_len );
+        wrtite( sockfd, buffer, len );
     }
 
     return 0;

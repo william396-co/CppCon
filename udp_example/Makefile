@@ -6,7 +6,7 @@ clean:
 udp_client:
 	gcc -o udp_client udp_client.c -Wall 
 
-upd_server:
+udp_server:
 	gcc -o udp_server udp_server.c -Wall
 
 

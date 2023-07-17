@@ -11,7 +11,7 @@ class A
 {
 public:
     explicit A( std::string const & n, int id )
-        : name { n }, a { id }
+        : a{id}, name { n }
     {
         println( __FUNCTION__, "(", name, ",", a, ")" );
     }

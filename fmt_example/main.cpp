@@ -61,6 +61,31 @@ template<> struct std::formatter<HostType>
     }
 };
 
+
+// 战斗方
+enum CombatSide
+{
+    eCombatSide_None = 0,  // 非法
+    eCombatSide_Left = 1,  // 攻方
+    eCombatSide_Right = 2, // 守方
+    eCombatSide_Draw = 3,  // 平局
+};
+
+template<> struct std::formatter<CombatSide>
+{
+    template<typename ParseContext>
+    constexpr auto parse( ParseContext & pc )
+    {
+        return std::to_string( pc.begin() );
+    }
+
+    template<typename FormatContext>
+    auto format( const CombatSide & value, FormatContext & fc ) const
+    {
+        return std::format_to( fc.out(), "{}", (int)value );
+    }
+};
+
 int main()
 {
 
@@ -69,6 +94,9 @@ int main()
 
     HostTypes hts = { HostType::Master, HostType::Cross };
     std::cout << std::format( "hts:{}\n", hts );
+
+    CombatSide sd = eCombatSide_Left;
+    std::cout<<std::format("combatside:{}\n",(int32_t)sd);
 
     return 0;
 }

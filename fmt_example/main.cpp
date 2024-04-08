@@ -102,7 +102,7 @@ template<> struct std::formatter<CombatSide>
         return std::format_to( fc.out(), "{}", (int)value );
     }
 };*/
-//ENUM_FORMAT(CombatSide)
+ENUM_FORMAT(CombatSide)
 
 int main()
 {

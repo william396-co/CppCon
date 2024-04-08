@@ -3,6 +3,20 @@
 #include <format>
 #include <vector>
 
+#define ENUM_FORMAT (TYPE) \
+template<> struct std::formatter<TYPE> {\
+    template <typename ParseContext>\
+    constexpr auto parse(ParseContext& pc) const -> decltype(pc.begin()) {\
+        return pc.begin();\
+    }\
+
+template <typename FormatContext>\
+auto format(TYPE const & value, FormatContext& fc) const -> decltype(fc.out()) {\
+		return std::format_to(fc.out(), "{}", (int32_t)value); \
+}\
+};
+
+
 // 节点类型
 enum class HostType
 {
@@ -46,6 +60,8 @@ template<> struct std::formatter<HostTypes>
     }
 };
 
+
+
 template<> struct std::formatter<HostType>
 {
     template<typename ParseContext>
@@ -61,6 +77,33 @@ template<> struct std::formatter<HostType>
     }
 };
 
+
+// 战斗方
+enum CombatSide
+{
+    eCombatSide_None = 0,  // 非法
+    eCombatSide_Left = 1,  // 攻方
+    eCombatSide_Right = 2, // 守方
+    eCombatSide_Draw = 3,  // 平局
+};
+
+/*
+template<> struct std::formatter<CombatSide>
+{
+    template<typename ParseContext>
+    constexpr auto parse( ParseContext & pc )
+    {
+        return std::to_string( pc.begin() );
+    }
+
+    template<typename FormatContext>
+    auto format( const CombatSide & value, FormatContext & fc ) const
+    {
+        return std::format_to( fc.out(), "{}", (int)value );
+    }
+};*/
+ENUM_FORMAT(CombatSide)
+
 int main()
 {
 
@@ -69,6 +112,9 @@ int main()
 
     HostTypes hts = { HostType::Master, HostType::Cross };
     std::cout << std::format( "hts:{}\n", hts );
+
+    CombatSide sd = eCombatSide_Left;
+  //  std::cout<<std::format("combatside:{}\n",(int32_t)sd);
 
     return 0;
 }

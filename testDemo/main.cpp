@@ -43,8 +43,24 @@ struct A
 union B
 {};
 
+void test( uint32_t n )
+{
+    std::cout << __FUNCTION__ << "(" << n << ")\n";
+}
+
 int main()
 {
+
+    int64_t x = 100, y = 98;
+    uint32_t b = 2;
+
+    auto z = ( x - y ) / b;
+
+    int32_t c = 3;
+    auto bz = z * c; 
+
+    test( bz );
+
     std::cout << std::boolalpha;                              // 输出 bool类型值，而不是数字1或0
     std::cout << std::is_class<MyStruct>::value << std::endl; // 输出 false
     std::cout << std::is_class<MyClass>::value << std::endl;  // 输出 true

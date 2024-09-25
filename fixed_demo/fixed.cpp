@@ -28,15 +28,15 @@ void show_bytes( byte_pointer start, size_t len )
     printf( "\n" );
 }
 
-void show_details( float f )
+void show_details( double f )
 {
-    using fixed64 = fpm::fixed<int32_t, int64_t, 4>;
+    using fixed64 = fpm::fixed<int64_t, int64_t, 13>; // prcesion to 0.0001 13bit is enough
 
     fixed64 fp = fixed64( f );
     auto rf = fp.raw_value();
     show_bytes( (byte_pointer)&rf, sizeof( rf ) );
 
-    std::cout << "f = " << f << "\tfp=" << to_string_with_precision( (float)fp ) << "\n";
+    std::cout << "f = " << f << "\tfp=" << to_string_with_precision( (double)fp ) << "\n";
 }
 
 int main()
@@ -57,10 +57,12 @@ int main()
     {
         std::cout << "==================fixed64 use 4 bits store fraction show fixedpoint details===========\n";
 
-        show_details( 1.1f );   // 0x00000012 1.125
-        show_details( 1.2f );   // 0x00000013 1.1875
-        show_details( 1.125f ); // 0x00000012 1.125
-        show_details( 1.3f );
+        show_details( 1.0001d ); // 0x00000012 1.125
+        show_details( 1.0002d ); // 0x00000013 1.1875
+        show_details( 1.0004d ); // 0x00000012 1.125
+        show_details( 1.0005d );
+        show_details( 1.0006d );
+        show_details( 1.0007d );
     }
 
     {

@@ -38,7 +38,7 @@ private:
                 // 等待条件满足(如果不满足)
                 m_pool->m_condition_lock.wait( lock, [&]() { return !m_pool->m_queue.empty(); } ); // wait(lock,pred) = (if(!pred()) wait();
 
-                dequeued = m_pool->m_queue.dequeue( func );                                        // 消费者
+                dequeued = m_pool->m_queue.dequeue( func ); // 消费者
                 lock.unlock();
 
                 // 如果成功取出，执行工作函数
@@ -105,7 +105,7 @@ public:
         };
 
         // 队列通过安全封装函数，并压入安全队列
-        unique_lock<mutex> lock( m_condition_mutex ); // 生产者
+        std::unique_lock<std::mutex> lock( m_condition_mutex ); // 生产者
         m_queue.enqueue( wrapper_func );
         lock.unlock();
 
